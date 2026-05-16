@@ -436,7 +436,7 @@ class GameManager {
         if (this.state === STATE.START) {
             if (this._tapped(cx - 80, cy + 50, 160, 50)) {
                 this.score = 0;
-                this._loadLevel(4);
+                this._loadLevel(0);
                 this.state = STATE.PLAYING;
             }
         } else if (this.state === STATE.PLAYING) {
@@ -445,7 +445,7 @@ class GameManager {
             // GAMEOVER or WIN → RIGIOCA button
             if (this._tapped(cx - 80, cy + 55, 160, 50)) {
                 this.score = 0;
-                this._loadLevel(4);
+                this._loadLevel(0);
                 this.state = STATE.PLAYING;
             }
         }
