@@ -193,6 +193,175 @@ const LEVELS = [
       { x: 3850, y: 420, type: "graffa"        }
     ],
     flagX: 3900
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // LIVELLO 4 — Cassamonica
+  // worldWidth 4500 · piazza · gazebo · palazzo Liberty · piccioni
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    id: 4,
+    name: "Cassamonica",
+    worldWidth: 4500,
+    background: {
+      skyColor:    "#5BA8E0",
+      groundColor: "#C8C0A8",
+      vesuvio: false,
+      mare:    false,
+      colline: false
+    },
+    platforms: [
+      { x:   80, y: 480, w: 200, h: 20, type: "pietra" },
+      { x:  350, y: 440, w: 160, h: 20, type: "pietra" },
+      { x:  580, y: 400, w: 140, h: 20, type: "pietra" },
+      { x:  790, y: 360, w: 120, h: 20, type: "pietra" },
+      { x: 1000, y: 420, w: 180, h: 20, type: "pietra" },
+      { x: 1250, y: 380, w: 150, h: 20, type: "pietra" },
+      { x: 1470, y: 340, w: 130, h: 20, type: "pietra" },
+      { x: 1680, y: 400, w: 160, h: 20, type: "pietra" },
+      { x: 1910, y: 360, w: 140, h: 20, type: "pietra" },
+      { x: 2130, y: 320, w: 120, h: 20, type: "pietra" },
+      { x: 2340, y: 380, w: 160, h: 20, type: "pietra" },
+      { x: 2570, y: 340, w: 140, h: 20, type: "pietra" },
+      { x: 2780, y: 300, w: 130, h: 20, type: "pietra" },
+      { x: 2990, y: 360, w: 150, h: 20, type: "pietra" },
+      { x: 3210, y: 320, w: 140, h: 20, type: "pietra" },
+      { x: 3430, y: 280, w: 120, h: 20, type: "pietra" },
+      { x: 3640, y: 340, w: 160, h: 20, type: "pietra" },
+      { x: 3870, y: 300, w: 140, h: 20, type: "pietra" },
+      { x: 4100, y: 360, w: 180, h: 20, type: "pietra" },
+      { x: 4330, y: 400, w: 150, h: 20, type: "pietra" }
+    ],
+    enemies: [
+      { x:  430, y: 428, type: "gabbiano" },
+      { x:  660, y: 388, type: "gabbiano" },
+      { x:  870, y: 348, type: "gabbiano" },
+      { x: 1080, y: 408, type: "gabbiano" },
+      { x: 1330, y: 368, type: "gabbiano" },
+      { x: 1550, y: 328, type: "gabbiano" },
+      { x: 1760, y: 388, type: "gabbiano" },
+      { x: 1990, y: 348, type: "gabbiano" },
+      { x: 2210, y: 308, type: "gabbiano" },
+      { x: 2420, y: 368, type: "gabbiano" },
+      { x: 2650, y: 328, type: "gabbiano" },
+      { x: 2860, y: 288, type: "gabbiano" },
+      { x: 3070, y: 348, type: "gabbiano" },
+      { x: 3290, y: 308, type: "gabbiano" },
+      { x: 3510, y: 268, type: "gabbiano" },
+      { x: 3720, y: 328, type: "gabbiano" },
+      { x: 3950, y: 288, type: "gabbiano" },
+      { x: 4180, y: 348, type: "gabbiano" }
+    ],
+    collectibles: [
+      { x:  130, y: 440, type: "graffa"       },
+      { x:  390, y: 400, type: "bottiglietta" },
+      { x:  620, y: 360, type: "graffa"       },
+      { x:  830, y: 320, type: "bottiglietta" },
+      { x: 1050, y: 380, type: "graffa"       },
+      { x: 1290, y: 340, type: "bottiglietta" },
+      { x: 1510, y: 300, type: "graffa"       },
+      { x: 1720, y: 360, type: "bottiglietta" },
+      { x: 1950, y: 320, type: "graffa"       },
+      { x: 2170, y: 280, type: "bottiglietta" },
+      { x: 2380, y: 340, type: "graffa"       },
+      { x: 2610, y: 300, type: "bottiglietta" },
+      { x: 2820, y: 260, type: "graffa"       },
+      { x: 3030, y: 320, type: "bottiglietta" },
+      { x: 3250, y: 280, type: "graffa"       },
+      { x: 3470, y: 240, type: "bottiglietta" },
+      { x: 3680, y: 300, type: "graffa"       },
+      { x: 3910, y: 260, type: "bottiglietta" },
+      { x: 4140, y: 320, type: "graffa"       },
+      { x: 4370, y: 360, type: "bottiglietta" }
+    ],
+    flagX: 4420
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // LIVELLO 5 — Piazza Spartaco
+  // worldWidth 5000 · piazza · motorini · edifici storici
+  // groundY 530 · motorino y = groundY - 85 = 445
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    id: 5,
+    name: "Piazza Spartaco",
+    worldWidth: 5000,
+    background: {
+      skyColor:    "#5BA8E0",
+      groundColor: "#C8B89A",
+      vesuvio: false,
+      mare:    false,
+      colline: false
+    },
+    platforms: [
+      { x:   80, y: 480, w: 200, h: 20, type: "pietra" },
+      { x:  360, y: 445, w: 160, h: 20, type: "pietra" },
+      { x:  590, y: 410, w: 150, h: 20, type: "pietra" },
+      { x:  810, y: 370, w: 160, h: 20, type: "pietra" },
+      { x: 1050, y: 425, w: 180, h: 20, type: "pietra" },
+      { x: 1310, y: 385, w: 150, h: 20, type: "pietra" },
+      { x: 1530, y: 345, w: 140, h: 20, type: "pietra" },
+      { x: 1750, y: 405, w: 160, h: 20, type: "pietra" },
+      { x: 1980, y: 365, w: 150, h: 20, type: "pietra" },
+      { x: 2210, y: 325, w: 160, h: 20, type: "pietra" },
+      { x: 2450, y: 385, w: 150, h: 20, type: "pietra" },
+      { x: 2680, y: 345, w: 140, h: 20, type: "pietra" },
+      { x: 2900, y: 305, w: 160, h: 20, type: "pietra" },
+      { x: 3130, y: 365, w: 150, h: 20, type: "pietra" },
+      { x: 3360, y: 325, w: 140, h: 20, type: "pietra" },
+      { x: 3580, y: 285, w: 160, h: 20, type: "pietra" },
+      { x: 3810, y: 345, w: 150, h: 20, type: "pietra" },
+      { x: 4040, y: 305, w: 140, h: 20, type: "pietra" },
+      { x: 4270, y: 365, w: 160, h: 20, type: "pietra" },
+      { x: 4510, y: 410, w: 180, h: 20, type: "pietra" },
+      { x: 4760, y: 450, w: 200, h: 20, type: "pietra" }
+    ],
+    enemies: [
+      { x:  407, y: 378, type: "motorino" },
+      { x:  632, y: 343, type: "motorino" },
+      { x:  857, y: 303, type: "motorino" },
+      { x: 1107, y: 358, type: "motorino" },
+      { x: 1352, y: 318, type: "motorino" },
+      { x: 1567, y: 278, type: "motorino" },
+      { x: 1797, y: 338, type: "motorino" },
+      { x: 2022, y: 298, type: "motorino" },
+      { x: 2257, y: 258, type: "motorino" },
+      { x: 2492, y: 318, type: "motorino" },
+      { x: 2717, y: 278, type: "motorino" },
+      { x: 2947, y: 238, type: "motorino" },
+      { x: 3172, y: 298, type: "motorino" },
+      { x: 3397, y: 258, type: "motorino" },
+      { x: 3627, y: 218, type: "motorino" },
+      { x: 3852, y: 278, type: "motorino" },
+      { x: 4077, y: 238, type: "motorino" },
+      { x: 4317, y: 298, type: "motorino" },
+      { x: 4567, y: 343, type: "motorino" },
+      { x: 4827, y: 383, type: "motorino" }
+    ],
+    collectibles: [
+      { x:  180, y: 440, type: "graffa"       },
+      { x:  440, y: 405, type: "bottiglietta" },
+      { x:  665, y: 370, type: "graffa"       },
+      { x:  890, y: 330, type: "bottiglietta" },
+      { x: 1140, y: 385, type: "graffa"       },
+      { x: 1385, y: 345, type: "bottiglietta" },
+      { x: 1600, y: 305, type: "graffa"       },
+      { x: 1830, y: 365, type: "bottiglietta" },
+      { x: 2055, y: 325, type: "graffa"       },
+      { x: 2290, y: 285, type: "bottiglietta" },
+      { x: 2525, y: 345, type: "graffa"       },
+      { x: 2750, y: 305, type: "bottiglietta" },
+      { x: 2980, y: 265, type: "graffa"       },
+      { x: 3205, y: 325, type: "bottiglietta" },
+      { x: 3430, y: 285, type: "graffa"       },
+      { x: 3660, y: 245, type: "bottiglietta" },
+      { x: 3885, y: 305, type: "graffa"       },
+      { x: 4110, y: 265, type: "bottiglietta" },
+      { x: 4350, y: 325, type: "graffa"       },
+      { x: 4600, y: 370, type: "bottiglietta" },
+      { x: 4860, y: 410, type: "graffa"       }
+    ],
+    flagX: 4930
   }
 
 ];

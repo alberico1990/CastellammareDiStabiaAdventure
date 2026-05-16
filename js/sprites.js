@@ -421,3 +421,150 @@ function drawPennone(ctx, x, y) {
 
     ctx.restore();
 }
+
+// ── drawMoto ──────────────────────────────────────────────────────────────────
+// Moto sportiva blu con pilota. (x,y) = centro-basso (punto contatto ruote).
+
+function drawMoto(ctx, x, y, frame) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(0.65, 0.65);
+
+    const rot     = frame === 1 ? Math.PI / 10 : 0;
+    const blue    = '#0D47A1';
+    const blueMid = '#1565C0';
+    const blueHi  = '#42A5F5';
+    const skin    = '#f1b27a';
+    const jacket  = '#0a2a5e';
+
+    function wheel(wx, wy, r) {
+        ctx.save(); ctx.translate(wx, wy);
+        ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2);
+        ctx.fillStyle = '#111'; ctx.fill();
+        ctx.beginPath(); ctx.arc(0, 0, r - 2, 0, Math.PI * 2);
+        ctx.strokeStyle = '#333'; ctx.lineWidth = 2; ctx.stroke();
+        ctx.beginPath(); ctx.arc(0, 0, r - 4, 0, Math.PI * 2);
+        ctx.strokeStyle = '#666'; ctx.lineWidth = 1.5; ctx.stroke();
+        ctx.rotate(rot);
+        ctx.strokeStyle = '#aaa'; ctx.lineWidth = 1.2;
+        for (let i = 0; i < 7; i++) {
+            const a = (Math.PI * 2 * i) / 7;
+            ctx.beginPath();
+            ctx.moveTo(Math.cos(a) * 3, Math.sin(a) * 3);
+            ctx.lineTo(Math.cos(a) * (r - 5), Math.sin(a) * (r - 5));
+            ctx.stroke();
+        }
+        ctx.fillStyle = '#888'; ctx.beginPath(); ctx.arc(0, 0, 4, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#444'; ctx.beginPath(); ctx.arc(0, 0, 2, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+    }
+
+    // scarico
+    ctx.strokeStyle = '#777'; ctx.lineWidth = 5; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(-18, -8); ctx.bezierCurveTo(-30, -6, -44, -4, -50, -8); ctx.stroke();
+    ctx.strokeStyle = '#aaa'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(-18, -8); ctx.bezierCurveTo(-30, -6, -44, -4, -50, -8); ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(-51, -8, 4, 5, 0.2, 0, Math.PI * 2);
+    ctx.fillStyle = '#666'; ctx.fill();
+
+    wheel(-35, 0, 18);
+    wheel(38, 0, 18);
+
+    // forcella
+    ctx.strokeStyle = '#999'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(28, -14); ctx.lineTo(40, -40); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(33, -14); ctx.lineTo(44, -40); ctx.stroke();
+    // ammortizzatore
+    ctx.strokeStyle = '#888'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(-28, -10); ctx.lineTo(-20, -32); ctx.stroke();
+
+    // telaio
+    ctx.strokeStyle = '#333'; ctx.lineWidth = 5; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(-20, -32); ctx.lineTo(0, -38); ctx.lineTo(28, -34); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, -38); ctx.lineTo(2, -20); ctx.lineTo(-20, -16); ctx.lineTo(-20, -32); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(2, -20); ctx.lineTo(28, -18); ctx.lineTo(28, -34); ctx.stroke();
+
+    // motore
+    ctx.fillStyle = '#2a2a2a';
+    ctx.beginPath(); ctx.moveTo(-16, -14); ctx.lineTo(24, -14); ctx.lineTo(24, -28); ctx.lineTo(-16, -28); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#444'; ctx.fillRect(-14, -26, 12, 10); ctx.fillRect(4, -26, 12, 10);
+
+    // carena posteriore
+    ctx.beginPath();
+    ctx.moveTo(-48, -12); ctx.bezierCurveTo(-50, -20, -42, -38, -20, -40);
+    ctx.lineTo(-4, -36); ctx.bezierCurveTo(-8, -20, -14, -14, -18, -10); ctx.closePath();
+    ctx.fillStyle = blue; ctx.fill();
+    ctx.strokeStyle = '#0a3080'; ctx.lineWidth = 1; ctx.stroke();
+
+    // cupolino
+    ctx.beginPath();
+    ctx.moveTo(16, -20); ctx.bezierCurveTo(14, -32, 20, -46, 36, -52);
+    ctx.bezierCurveTo(46, -54, 52, -46, 50, -34); ctx.bezierCurveTo(48, -24, 42, -18, 36, -16);
+    ctx.bezierCurveTo(30, -14, 20, -16, 16, -20); ctx.closePath();
+    ctx.fillStyle = blueMid; ctx.fill();
+    ctx.strokeStyle = '#0a3080'; ctx.lineWidth = 1; ctx.stroke();
+    // highlight cupolino
+    ctx.beginPath(); ctx.moveTo(22, -26); ctx.bezierCurveTo(22, -38, 28, -48, 38, -50);
+    ctx.bezierCurveTo(44, -48, 46, -40, 44, -32); ctx.bezierCurveTo(42, -24, 34, -22, 28, -24); ctx.closePath();
+    ctx.fillStyle = blueHi; ctx.globalAlpha = 0.35; ctx.fill(); ctx.globalAlpha = 1;
+
+    // faro
+    ctx.beginPath(); ctx.ellipse(50, -38, 6, 5, 0.3, 0, Math.PI * 2);
+    ctx.fillStyle = '#FFFDE0'; ctx.fill();
+    ctx.strokeStyle = '#ddd'; ctx.lineWidth = 1; ctx.stroke();
+
+    // sella
+    ctx.beginPath(); ctx.moveTo(-22, -40); ctx.bezierCurveTo(-14, -48, 10, -48, 18, -40);
+    ctx.bezierCurveTo(10, -36, -14, -36, -22, -40); ctx.closePath();
+    ctx.fillStyle = '#111'; ctx.fill();
+
+    // codone + luce posteriore
+    ctx.beginPath(); ctx.moveTo(-20, -40); ctx.bezierCurveTo(-28, -42, -44, -36, -48, -28);
+    ctx.lineTo(-42, -26); ctx.bezierCurveTo(-38, -32, -24, -36, -18, -36); ctx.closePath();
+    ctx.fillStyle = blue; ctx.fill();
+    ctx.fillStyle = '#ff1111'; ctx.beginPath(); ctx.ellipse(-48, -28, 4, 3, 0, 0, Math.PI * 2); ctx.fill();
+
+    // targa
+    ctx.fillStyle = '#fff'; ctx.fillRect(-50, -22, 14, 8);
+    ctx.strokeStyle = '#bbb'; ctx.lineWidth = 0.5; ctx.strokeRect(-50, -22, 14, 8);
+    ctx.fillStyle = '#1A3A8F'; ctx.font = 'bold 4px Arial'; ctx.textAlign = 'center';
+    ctx.fillText('NA 321', -43, -16);
+
+    // manubrio racing
+    ctx.strokeStyle = '#888'; ctx.lineWidth = 3; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(18, -42); ctx.lineTo(28, -46); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(26, -46); ctx.lineTo(36, -44); ctx.stroke();
+
+    // PILOTA — stivali
+    ctx.fillStyle = '#090909'; ctx.fillRect(10, -18, 12, 5); ctx.fillRect(-36, -16, 10, 5);
+    // gambe
+    ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 6;
+    ctx.beginPath(); ctx.moveTo(-2, -38); ctx.lineTo(10, -26); ctx.lineTo(20, -18); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-12, -38); ctx.lineTo(-24, -24); ctx.lineTo(-32, -16); ctx.stroke();
+    // busto
+    ctx.fillStyle = jacket;
+    ctx.beginPath(); ctx.moveTo(-20, -40); ctx.bezierCurveTo(-20, -64, 12, -64, 14, -40); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = blue; ctx.fillRect(-18, -58, 4, 18); ctx.fillRect(8, -58, 4, 18);
+    // braccia
+    ctx.strokeStyle = jacket; ctx.lineWidth = 6;
+    ctx.beginPath(); ctx.moveTo(8, -54); ctx.lineTo(24, -50); ctx.lineTo(36, -46); ctx.stroke();
+    ctx.fillStyle = '#111'; ctx.beginPath(); ctx.arc(36, -46, 3, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(-6, -54); ctx.lineTo(6, -50); ctx.stroke();
+    // collo
+    ctx.fillStyle = skin; ctx.fillRect(-4, -64, 7, 6);
+    // casco integrale
+    ctx.fillStyle = '#1a1a1a'; ctx.beginPath(); ctx.arc(0, -70, 13, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = blue; ctx.beginPath(); ctx.arc(0, -70, 12, Math.PI * 0.75, Math.PI * 2.25); ctx.fill();
+    // visiera
+    ctx.beginPath(); ctx.moveTo(-10, -63); ctx.bezierCurveTo(-6, -57, 6, -57, 10, -63);
+    ctx.bezierCurveTo(6, -60, -6, -60, -10, -63); ctx.closePath();
+    ctx.fillStyle = 'rgba(80,180,255,0.6)'; ctx.fill();
+    ctx.strokeStyle = 'rgba(100,200,255,0.8)'; ctx.lineWidth = 0.8; ctx.stroke();
+    // striscia bianca casco
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(0, -70, 12, Math.PI * 1.1, Math.PI * 1.9); ctx.fill();
+    ctx.fillStyle = blue;   ctx.beginPath(); ctx.arc(0, -70, 10, Math.PI * 1.1, Math.PI * 1.9); ctx.fill();
+    ctx.strokeStyle = '#000'; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.arc(0, -70, 12, 0, Math.PI * 2); ctx.stroke();
+
+    ctx.restore();
+}

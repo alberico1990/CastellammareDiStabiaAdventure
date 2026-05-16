@@ -26,9 +26,9 @@ class JoystickTouch {
         this.jmpActive  = false;
         this.jmpFired   = false;
 
-        this.JOY_R = 55;
-        this.STK_R = 22;
-        this.BTN_R = 42;
+        this.JOY_R = 72;
+        this.STK_R = 30;
+        this.BTN_R = 62;
 
         const cvs = document.getElementById('gameCanvas');
         cvs.addEventListener('touchstart',  e => this._onStart(e), { passive: false });
@@ -91,8 +91,8 @@ class JoystickTouch {
 
     draw(ctx) {
         if (!this.joyActive && this.joyId === null) {
-            this.base.x = 90;
-            this.base.y = window.innerHeight - 90;
+            this.base.x = window.innerWidth * 0.15;
+            this.base.y = window.innerHeight * 0.82;
             this.stick.x = this.base.x;
             this.stick.y = this.base.y;
         }
@@ -133,8 +133,8 @@ class JoystickTouch {
         ctx.stroke();
 
         // Jump button
-        const bx = window.innerWidth - 80;
-        const by = window.innerHeight - 90;
+        const bx = window.innerWidth * 0.85;
+        const by = window.innerHeight * 0.82;
         ctx.beginPath();
         ctx.arc(bx, by, BTN_R, 0, Math.PI * 2);
         ctx.fillStyle = jmpActive ? 'rgba(255,215,0,0.75)' : 'rgba(255,215,0,0.30)';
@@ -156,8 +156,8 @@ class JoystickTouch {
 const joystick = new JoystickTouch();
 
 const controls = {
-    get left()  { return Keys.ArrowLeft  || Keys.KeyA || joystick.dx < -12; },
-    get right() { return Keys.ArrowRight || Keys.KeyD || joystick.dx >  12; },
+    get left()  { return Keys.ArrowLeft  || Keys.KeyA || joystick.dx < -8; },
+    get right() { return Keys.ArrowRight || Keys.KeyD || joystick.dx >  8; },
     get jump()  {
         const j = Keys.ArrowUp || Keys.Space || Keys.KeyW || joystick.jmpFired;
         if (joystick.jmpFired) joystick.jmpFired = false;
