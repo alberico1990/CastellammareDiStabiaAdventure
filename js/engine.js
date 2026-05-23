@@ -1,9 +1,16 @@
 'use strict';
 
-const GRAVITY    = 0.55;
-const MOVE_SPEED = 5;
-const JUMP_FORCE = -14;
-const FRICTION   = 0.82;
+// Costanti in unità "@60fps" — applicate con f = dt*60 per essere FPS-independent
+const GRAVITY        = 0.55;   // px/frame²
+const MOVE_SPEED     = 5;      // px/frame
+const JUMP_FORCE     = -14;    // px/frame (velocità iniziale del salto)
+const FRICTION       = 0.82;   // moltiplicatore per frame (inerzia)
+const MAX_FALL_SPEED = 18;     // tetto caduta (evita teleport attraverso piattaforme)
+
+// Quality-of-life del salto (in secondi reali)
+const COYOTE_TIME   = 0.10;    // puoi saltare fino a 100ms dopo aver lasciato il suolo
+const JUMP_BUFFER   = 0.12;    // premere salto fino a 120ms prima dell'atterraggio funziona
+const JUMP_CUT_MULT = 0.45;    // rilasciando salto durante salita, velY viene ridotta
 
 class Camera {
     constructor(canvasWidth, canvasHeight) {

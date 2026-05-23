@@ -8,45 +8,85 @@ const GROUND_Y = WORLD_H - 70;   // 530
 class Protagonista extends GameObject {
     constructor(x, y) {
         super(x, y, 34, 78);
-        this.lives      = 3;
-        this.facingLeft = false;
-        this.frame      = 0;
-        this.frameTick  = 0;
-        this.onGround   = false;
-        this.invTimer   = 0;
-        this.prevJump   = false;
+        this.lives        = 3;
+        this.facingLeft   = false;
+        this.frame        = 0;
+        this.frameTick    = 0;
+        this.onGround     = false;
+        this.invTimer     = 0;
+        // Quality-of-life salto
+        this.coyote       = 0;       // tempo residuo coyote (s)
+        this.jumpBuffer   = 0;       // tempo residuo buffer (s)
+        this._prevHeld    = false;   // per rilevare rilascio salto (jump cut)
+        this._jumping     = false;   // sto salendo in seguito a un salto (per cut)
     }
 
     update(dt, platforms) {
-        const wantsJump = controls.jump;
+        // Fattore di normalizzazione: 1.0 a 60fps, 2.0 a 30fps, 0.5 a 120fps
+        const f = dt * 60;
 
-        if      (controls.left)  { this.velX = -MOVE_SPEED; this.facingLeft = true;  }
-        else if (controls.right) { this.velX =  MOVE_SPEED; this.facingLeft = false; }
-        else                       this.velX = 0;
-
-        if (wantsJump && !this.prevJump && this.onGround) {
-            this.velY     = JUMP_FORCE;
-            this.onGround = false;
+        // ── Input orizzontale con FRICTION (inerzia frame-rate independent) ──
+        if (controls.left) {
+            this.velX = -MOVE_SPEED;
+            this.facingLeft = true;
+        } else if (controls.right) {
+            this.velX =  MOVE_SPEED;
+            this.facingLeft = false;
+        } else {
+            this.velX *= Math.pow(FRICTION, f);
+            if (Math.abs(this.velX) < 0.05) this.velX = 0;
         }
-        this.prevJump = wantsJump;
 
+        // ── Timer coyote & buffer ─────────────────────────────────────────────
+        if (this.onGround) this.coyote = COYOTE_TIME;
+        else               this.coyote = Math.max(0, this.coyote - dt);
+
+        if (controls.jumpPressed) this.jumpBuffer = JUMP_BUFFER;
+        else                      this.jumpBuffer = Math.max(0, this.jumpBuffer - dt);
+
+        // ── Esecuzione salto (buffer + coyote) ────────────────────────────────
+        if (this.jumpBuffer > 0 && this.coyote > 0) {
+            this.velY       = JUMP_FORCE;
+            this.jumpBuffer = 0;
+            this.coyote     = 0;
+            this.onGround   = false;
+            this._jumping   = true;
+        }
+
+        // ── Variable jump height: taglio una sola volta al rilascio ──────────
+        const held = controls.jumpHeld;
+        if (this._jumping && this._prevHeld && !held && this.velY < 0) {
+            this.velY *= JUMP_CUT_MULT;
+        }
+        if (this.velY >= 0) this._jumping = false;
+        this._prevHeld = held;
+
+        // ── Animazione camminata ──────────────────────────────────────────────
         if (this.velX !== 0 && this.onGround) {
-            if (++this.frameTick >= 8) { this.frame = 1 - this.frame; this.frameTick = 0; }
+            this.frameTick += f;
+            if (this.frameTick >= 8) { this.frame = 1 - this.frame; this.frameTick = 0; }
         }
 
-        this.velY += GRAVITY;
-        this.x    += this.velX;
-        this.y    += this.velY;
-        this.x     = Math.max(0, this.x);
+        // ── Fisica (gravità + integrazione posizione, tutto con dt) ───────────
+        this.velY += GRAVITY * f;
+        if (this.velY > MAX_FALL_SPEED) this.velY = MAX_FALL_SPEED;
 
+        const dx = this.velX * f;
+        const dy = this.velY * f;
+        this.x += dx;
+        this.y += dy;
+        this.x  = Math.max(0, this.x);
+
+        // ── Collisioni con piattaforme (solo top-landing) ─────────────────────
         this.onGround = false;
         for (const p of platforms) {
-            if (aabb(this, p) && this.velY >= 0 && (this.y + this.h - this.velY) <= p.y + 6) {
-                this.y      = p.y - this.h;
-                this.velY   = 0;
+            if (aabb(this, p) && this.velY >= 0 && (this.y + this.h - dy) <= p.y + 6) {
+                this.y        = p.y - this.h;
+                this.velY     = 0;
                 this.onGround = true;
             }
         }
+
         if (this.invTimer > 0) this.invTimer -= dt;
     }
 
@@ -55,6 +95,7 @@ class Protagonista extends GameObject {
         this.lives--;
         this.invTimer = 2;
         this.velY     = JUMP_FORCE * 0.45;
+        this._jumping = false;
     }
 
     draw(ctx) {

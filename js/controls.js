@@ -156,13 +156,29 @@ class JoystickTouch {
 const joystick = new JoystickTouch();
 
 const controls = {
+    _kbHeldPrev: false,
+
     get left()  { return Keys.ArrowLeft  || Keys.KeyA || joystick.dx < -8; },
     get right() { return Keys.ArrowRight || Keys.KeyD || joystick.dx >  8; },
-    get jump()  {
-        const j = Keys.ArrowUp || Keys.Space || Keys.KeyW || joystick.jmpFired;
+
+    // Edge-triggered: vero SOLO al frame del press (per buffer + start salto)
+    get jumpPressed() {
+        const kbNow  = Keys.ArrowUp || Keys.Space || Keys.KeyW;
+        const kbEdge = kbNow && !this._kbHeldPrev;
+        this._kbHeldPrev = kbNow;
+        const joyEdge = joystick.jmpFired;
         if (joystick.jmpFired) joystick.jmpFired = false;
-        return j;
+        return kbEdge || joyEdge;
     },
+
+    // Continuo: vero finché il tasto/bottone è premuto (per variable jump height)
+    get jumpHeld() {
+        return Keys.ArrowUp || Keys.Space || Keys.KeyW || joystick.jmpActive;
+    },
+
+    // Legacy: tenuto per compatibilità (equivale a jumpPressed)
+    get jump() { return this.jumpPressed; },
+
     drawUI(ctx) { joystick.draw(ctx); },
     isMobile: navigator.maxTouchPoints > 0,
 };
