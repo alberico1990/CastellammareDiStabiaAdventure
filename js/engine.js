@@ -64,6 +64,7 @@ class Engine {
         this.last    = 0;
         this.objects = [];
         this.running = false;
+        this.accumulator = 0;   // accumulatore per fixed timestep
 
         this._resize = this._resize.bind(this);
         window.addEventListener('resize', this._resize);
@@ -82,6 +83,7 @@ class Engine {
 
     start() {
         this.running = true;
+        this.last = performance.now();
         requestAnimationFrame(ts => this._loop(ts));
     }
 
@@ -91,10 +93,22 @@ class Engine {
 
     _loop(ts) {
         if (!this.running) return;
-        const dt = Math.min((ts - this.last) / 1000, 0.05);
+
+        // dt reale del frame, clampato a 0.1s per evitare salti enormi (tab in background)
+        const realDt = Math.min((ts - this.last) / 1000, 0.1);
         this.last = ts;
 
-        this.update(dt);
+        // FIXED TIMESTEP: simulo a step fissi di 1/60s, indipendente dal refresh rate
+        this.accumulator += realDt;
+        let steps = 0;
+        while (this.accumulator >= Engine.FIXED_DT && steps < Engine.MAX_STEPS) {
+            this.update(Engine.FIXED_DT);
+            this.accumulator -= Engine.FIXED_DT;
+            steps++;
+        }
+        // Anti-spiral-of-death: se siamo troppo indietro, scarta il residuo
+        if (steps >= Engine.MAX_STEPS) this.accumulator = 0;
+
         this.draw();
 
         requestAnimationFrame(ts => this._loop(ts));
@@ -110,3 +124,6 @@ class Engine {
         for (const obj of this.objects) obj.draw(ctx);
     }
 }
+
+Engine.FIXED_DT  = 1 / 60;   // step di simulazione: 60Hz logici
+Engine.MAX_STEPS = 5;        // catch-up massimo per loop (evita spiral of death)
