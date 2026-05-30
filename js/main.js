@@ -10,7 +10,8 @@ class Protagonista extends GameObject {
         super(x, y, 34, 78);
         this.lives        = 3;
         this.facingLeft   = false;
-        this.frame        = 0;
+        this.frame        = 0;   // 0=idle, usato solo per idle check
+        this.walkFrame    = 0;   // 0-3 ciclo walk indipendente
         this.frameTick    = 0;
         this.onGround     = false;
         this.invTimer     = 0;
@@ -63,8 +64,12 @@ class Protagonista extends GameObject {
 
         // ── Animazione camminata ──────────────────────────────────────────────
         if (this.velX !== 0 && this.onGround) {
+            if (Math.floor(this.frameTick) === 0) particles.dust(this.x + 17, this.y + 78);
             this.frameTick += f;
-            if (this.frameTick >= 8) { this.frame = 1 - this.frame; this.frameTick = 0; }
+            if (this.frameTick >= 14) { this.walkFrame = (this.walkFrame + 1) % 3; this.frameTick = 0; }
+            this.frame = 1; // in movimento
+        } else if (this.onGround) {
+            this.frame = 0; // idle
         }
 
         // ── Fisica (gravità + integrazione posizione, tutto con dt) ───────────
@@ -94,13 +99,15 @@ class Protagonista extends GameObject {
         if (this.invTimer > 0) return;
         this.lives--;
         this.invTimer = 2;
+        screenShake.add(0.45);
+        particles.sparks(this.x + 17, this.y + 39);
         this.velY     = JUMP_FORCE * 0.45;
         this._jumping = false;
     }
 
     draw(ctx) {
         if (this.invTimer > 0 && Math.floor(this.invTimer * 8) % 2 === 0) return;
-        drawProtagonista(ctx, this.x, this.y, this.facingLeft, this.frame);
+        drawProtagonista(ctx, this.x, this.y, this.facingLeft, this.frame, !this.onGround, this.walkFrame);
     }
 }
 
@@ -516,8 +523,10 @@ class GameManager {
                 c.collected = true;
                 if (c.type === 'graffa') {
                     this.score += 100;
+                    particles.stars(c.x + 18, c.y + 18, '#FFD700');
                 } else {
                     this.player.lives++;
+                    particles.stars(c.x + 18, c.y + 18, '#5BB8F5');
                 }
             }
         }
@@ -527,6 +536,7 @@ class GameManager {
             if (!n.alive || !aabb(pl, n)) continue;
             if (pl.velY > 0 && (pl.y + pl.h - pl.velY) <= n.y + 8) {
                 n.alive = false;
+                particles.pop(n.x + n.w / 2, n.y + n.h / 2);
                 pl.velY = JUMP_FORCE * 0.55;
                 this.score += 200;
             } else {
@@ -576,12 +586,14 @@ class GameManager {
 
         // 2. World space
         ctx.save();
+        screenShake.apply(ctx);
         cam.apply(ctx);
 
         lv.drawGround(ctx, cam.x, cW, cH);
         lv.drawPlatforms(ctx);
         lv.drawObjects(ctx);
         this.player.draw(ctx);
+        particles.draw(ctx);
 
         ctx.restore();
 
